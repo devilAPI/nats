@@ -50,8 +50,10 @@ type UpdatePackagesRequest struct {
 // UpdateResult is the outcome of updating a single package
 type UpdateResult struct {
 	AvailableUpdate
-	Failed bool   `json:"failed,omitempty"`
-	Info   string `json:"info,omitempty"`
+	Failed bool `json:"failed,omitempty"`
+	// UpToDate is set if the package manager found no applicable update
+	UpToDate bool   `json:"uptodate,omitempty"`
+	Info     string `json:"info,omitempty"`
 }
 
 // UpdateRun records a bulk update run performed by an agent
@@ -60,6 +62,8 @@ type UpdateRun struct {
 	Finished time.Time      `json:"finished,omitempty"`
 	Total    int            `json:"total"`
 	Results  []UpdateResult `json:"results,omitempty"`
+	// Error is set if the run couldn't be performed, e.g. updates couldn't be listed
+	Error string `json:"error,omitempty"`
 }
 
 // Running reports if the update run is still in progress
