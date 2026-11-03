@@ -81,6 +81,25 @@ func (r *UpdateRun) Running() bool {
 	return r != nil && !r.Started.IsZero() && r.Finished.IsZero()
 }
 
+// Counts returns how many packages of the run were updated, were already up to date
+// and failed to update
+func (r *UpdateRun) Counts() (updated, upToDate, failed int) {
+	if r == nil {
+		return 0, 0, 0
+	}
+	for _, result := range r.Results {
+		switch {
+		case result.Failed:
+			failed++
+		case result.UpToDate:
+			upToDate++
+		default:
+			updated++
+		}
+	}
+	return updated, upToDate, failed
+}
+
 // AvailableUpdatesResponse is the agent's answer to an available updates request
 type AvailableUpdatesResponse struct {
 	Updates []AvailableUpdate `json:"updates,omitempty"`
