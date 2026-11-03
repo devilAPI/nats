@@ -45,6 +45,16 @@ type AvailableUpdate struct {
 type UpdatePackagesRequest struct {
 	AgentId  string            `json:"agentid,omitempty"`
 	Packages []AvailableUpdate `json:"packages,omitempty"`
+	// RequestedAt is set for requests queued for agents that may be offline, so
+	// agents can ignore requests that waited for too long
+	RequestedAt time.Time `json:"requestedat,omitempty"`
+}
+
+// ListPackageUpdatesRequest asks an agent for its available updates. With StatusOnly,
+// the agent only reports its last update run, which is fast and doesn't use the
+// package manager.
+type ListPackageUpdatesRequest struct {
+	StatusOnly bool `json:"statusonly,omitempty"`
 }
 
 // UpdateResult is the outcome of updating a single package
